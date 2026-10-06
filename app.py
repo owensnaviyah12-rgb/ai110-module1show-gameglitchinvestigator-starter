@@ -5,7 +5,6 @@ from logic_utils import get_range_for_difficulty, parse_guess, check_guess, upda
 st.set_page_config(page_title="Glitchy Guesser", page_icon="🎮")
 
 st.title("🎮 Game Glitch Investigator")
-st.caption("An AI-generated guessing game. Something is off.")
 
 st.sidebar.header("Settings")
 
@@ -27,20 +26,25 @@ low, high = get_range_for_difficulty(difficulty)
 st.sidebar.caption(f"Range: {low} to {high}")
 st.sidebar.caption(f"Attempts allowed: {attempt_limit}")
 
-if "secret" not in st.session_state:
-    st.session_state.secret = random.randint(low, high)
 
-if "attempts" not in st.session_state:
-    st.session_state.attempts = 1
-
-if "score" not in st.session_state:
+def start_new_game():
+    """Reset all game state and draw a secret from the current difficulty range."""
+    new_low, new_high = get_range_for_difficulty(difficulty)
+    st.session_state.secret = random.randint(new_low, new_high)
+    st.session_state.attempts = 0
     st.session_state.score = 0
-
-if "status" not in st.session_state:
     st.session_state.status = "playing"
-
-if "history" not in st.session_state:
     st.session_state.history = []
+    st.session_state.difficulty = difficulty
+
+
+# First load: set up a game.
+if "secret" not in st.session_state:
+    start_new_game()
+
+# FIX: Changing difficulty used to keep a secret from the old range.
+if st.session_state.get("difficulty") != difficulty:
+    start_new_game()
 
 st.subheader("Make a guess")
 
@@ -70,12 +74,10 @@ with col3:
     show_hint = st.checkbox("Show hint", value=True)
 
 if new_game:
-    st.session_state.attempts = 0
-    # FIX: Refactored logic into logic_utils.py using get_range_for_difficulty,
-    # instead of hardcoding random.randint(1, 100). Previously this ignored
-    # the selected difficulty's range.
-    new_low, new_high = get_range_for_difficulty(difficulty)
-    st.session_state.secret = random.randint(new_low, new_high)
+    # FIX: New Game now uses the selected difficulty's range (it used to be a
+    # hardcoded randint(1, 100)) and also resets status, score, and history so
+    # the game is playable again after a win or loss.
+    start_new_game()
     st.success("New game started.")
     st.rerun()
 
@@ -97,16 +99,9 @@ if submit:
     else:
         st.session_state.history.append(guess_int)
 
-        # FIXME: Logic breaks here — secret is converted to a string on
-        # even-numbered attempts, which breaks numeric comparison in
-        # check_guess. This is a separate, still-open bug (not one of the
-        # two fixed in this pass).
-        if st.session_state.attempts % 2 == 0:
-            secret = str(st.session_state.secret)
-        else:
-            secret = st.session_state.secret
-
-        outcome, message = check_guess(guess_int, secret)
+        # FIX: The secret used to be converted to a string on even-numbered
+        # attempts, which broke numeric comparison. It is now always an int.
+        outcome, message = check_guess(guess_int, st.session_state.secret)
 
         if show_hint:
             st.warning(message)
@@ -134,4 +129,4 @@ if submit:
                 )
 
 st.divider()
-st.caption("Built by an AI that claims this code is production-ready.")
+st.caption("Game Glitch Investigator 🎮")
