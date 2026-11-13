@@ -89,9 +89,13 @@ if st.session_state.status != "playing":
     st.stop()
 
 if submit:
-    st.session_state.attempts += 1
-
     ok, guess_int, err = parse_guess(raw_guess)
+    if not ok:
+        st.error(err)                    # bad input, no attempt used
+    else:
+        st.session_state.attempts += 1   # only valid guesses count
+        st.session_state.history.append(guess_int)
+        ...
 
     if not ok:
         st.session_state.history.append(raw_guess)
