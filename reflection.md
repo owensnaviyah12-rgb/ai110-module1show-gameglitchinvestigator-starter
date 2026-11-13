@@ -8,12 +8,26 @@ The first time I ran the game and started guessing, the hints were wrong in a co
 
 ```text
 $ python -m streamlit run app.py          # original starter code
-Difficulty: Normal (range 1-100, 8 attempts)
-Developer Debug Info -> Secret: <<FILL: exact secret>>
-Attempt 1: guessed 50 -> hint shown: "<<FILL>>"   (expected: Go HIGHER!)
-Attempt 2: guessed 90 -> hint shown: "<<FILL>>"   (expected: Go LOWER!)
-Attempt 3: guessed 7  -> hint shown: "<<FILL>>"   (expected: Go HIGHER!)
-Typed "abc", clicked Submit -> Attempts left went from <<FILL>> to <<FILL>>   (expected: no change)
+### Post-fix game session
+
+Exported from the app's history table (`session_history.csv`). Normal
+difficulty (range 1–100, 8 attempts). The secret was 44.
+
+```text
+Attempt  Guess  Result    Heat
+1        46     Too High  🔥 Burning hot!
+2        47     Too High  🔥 Burning hot!
+3        48     Too High  🔥 Burning hot!
+4        40     Too Low   🔥 Burning hot!
+5        50     Too High  🌶️ Hot
+6        49     Too High  🌶️ Hot
+7        52     Too High  🌶️ Hot
+8        35     Too Low   🌶️ Hot
+```
+
+Every hint matches the real number: guesses above 44 say Too High and guesses
+below 44 say Too Low, and the hot/cold label gets warmer as the guess nears 44.
+All 8 guesses were valid, and the game ended after the 8th attempt.
 $ python -c "print('9' > '57', 9 > 57)"
 True False
 ```
