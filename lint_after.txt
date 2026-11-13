@@ -1,2 +1,1 @@
-app.py:5:1: F401 'logic_utils.update_score' imported but unused
-logic_utils.py:136:12: F821 undefined name 'current_score'
+app.py:166:9: E999 IndentationError: unexpected indent

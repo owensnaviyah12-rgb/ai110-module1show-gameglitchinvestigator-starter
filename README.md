@@ -122,7 +122,7 @@ tests/test_game_logic.py::test_temperature_far_guess_is_freezing_cold PASSED    
 tests/test_game_logic.py::test_temperature_middle_distances PASSED                                                                                                     [ 95%]
 tests/test_game_logic.py::test_temperature_scales_with_range_size PASSED                                                                                               [ 97%]
 tests/test_game_logic.py::test_temperature_single_number_range_does_not_crash PASSED                                                                                   [100%]
-
+============================== 44 passed in 0.07s ==============================
 ```
 
 ## 🚀 Stretch Features
@@ -142,8 +142,8 @@ Every function in `logic_utils.py` has a docstring with Args and Returns, and
 the code was checked with flake8:
 
 ```
-<<FILL: paste the contents of lint_after.txt. An empty result is fine,
-write "flake8: no warnings" above it.>>
+app.py:5:1: F401 'logic_utils.update_score' imported but unused
+logic_utils.py:136:12: F821 undefined name 'current_score'
 ```
 
 ### Enhanced game UI and formatting

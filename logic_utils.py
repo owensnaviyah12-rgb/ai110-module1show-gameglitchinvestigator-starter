@@ -133,4 +133,3 @@ def get_temperature(guess: int, secret: int, low: int, high: int):
     if ratio <= 0.50:
         return "❄️ Cold"
     return "🧊 Freezing cold!"
-    return current_score
